@@ -1,8 +1,27 @@
 //https://jsonplaceholder.typicode.com/posts
 
+const loader = document.querySelector('.noLoader')
+
+function displayLoading() {
+  loader.classList.add('loading');
+}
+
+function stopLoading() {
+  loader.classList.remove('loading');
+}
+
+
+const wait = ms => new Promise(
+  (resolve, reject) => setTimeout(resolve, ms)
+);
+
+
 let posts = async () => {
+  displayLoading();
+  await wait(3000);
     let data = await fetch('https://jsonplaceholder.typicode.com/posts');
     let posts = await data.json();
+    stopLoading();
     console.log(posts);
     // get the reference for the body
     var body = document.getElementsByTagName("body")[0];
@@ -53,13 +72,19 @@ let posts = async () => {
 }
 posts()
 
-function New() {
+async function New() {
     var userid = document.getElementById("new_userId").value;
     var new_title = document.getElementById("new_title").value;
     var new_body = document.getElementById("new_body").value;
 
     console.log("Input Data: " + userid + " " + new_title + " " + new_body);
 
+    // loading for post call
+    displayLoading();
+    await wait(2000);
+    stopLoading();
+
+    
     fetch('https://jsonplaceholder.typicode.com/posts', {
         method: 'POST',
         body: JSON.stringify({
